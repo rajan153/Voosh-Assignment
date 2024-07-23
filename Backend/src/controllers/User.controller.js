@@ -1,6 +1,5 @@
 import { User } from "../models/User.model.js";
 import { asyncHandler } from "../utils/AsyncHandler.js";
-import { ApiError } from "../utils/ApiError.js";
 import { uploadOnCloudinary } from "../configs/Cloudinary.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 
@@ -11,10 +10,9 @@ const generateAccessAndRefereshTokens = async (userId) => {
 
     return { accessToken };
   } catch (error) {
-    throw new ApiError(
-      500,
-      "Something went wrong while generating access token"
-    );
+    return res.status(500).json({
+      message: "Something went wrong while generating access token",
+    });
   }
 };
 
@@ -24,13 +22,17 @@ const registerUser = asyncHandler(async (req, res) => {
   if (
     [firstName, lastName, email, password].some((field) => field?.trim() === "")
   ) {
-    throw new ApiError(400, `${field} is required`);
+    return res.status(409).json({
+      message: `All Fields Required`,
+    });
   }
 
   const existedUser = await User.findOne({ email });
 
   if (existedUser) {
-    throw new ApiError(409, "User already exists");
+    return res.status(409).json({
+      message: "User Already Exists",
+    });
   }
 
   await User.create({
@@ -52,13 +54,17 @@ const loginUser = asyncHandler(async (req, res) => {
   const user = await User.findOne({ email });
 
   if (!user) {
-    throw new ApiError(404, "User does not exist");
+    return res.status(404).json({
+      message: "User does not exist",
+    });
   }
 
   const isPasswordValid = await user.isPasswordCorrect(password);
 
   if (!isPasswordValid) {
-    throw new ApiError(401, "Invalid user credentials");
+    return res.status(401).json({
+      message: "Invalid user credentials",
+    });
   }
 
   const { accessToken } = await generateAccessAndRefereshTokens(user._id);
@@ -101,13 +107,17 @@ const updateUserAvatar = asyncHandler(async (req, res) => {
   const avatarLocalPath = req.file?.path;
 
   if (!avatarLocalPath) {
-    throw new ApiError(400, "Avatar file is missing");
+    return res.status(400).json({
+      message: "Avatar file is missing",
+    });
   }
 
   const avatar = await uploadOnCloudinary(avatarLocalPath);
 
   if (!avatar.url) {
-    throw new ApiError(400, "Error while uploading on avatar");
+    return res.status(400).json({
+      message: "Error while uploading image",
+    });
   }
 
   const user = await User.findByIdAndUpdate(
