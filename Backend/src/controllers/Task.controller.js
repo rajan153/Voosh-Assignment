@@ -1,6 +1,5 @@
 import { Task } from "../models/Task.model.js";
 import { asyncHandler } from "../utils/AsyncHandler.js";
-import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 
 const createTask = asyncHandler(async (req, res) => {
@@ -15,7 +14,7 @@ const createTask = asyncHandler(async (req, res) => {
   await Task.create({
     title,
     description,
-    dueDate,
+    dueDate: dueDate || Date.now() + 24 * 60 * 60 * 1000,
     createdBy: req.user._id,
   });
 
@@ -28,7 +27,9 @@ const getTask = asyncHandler(async (req, res) => {
   const { taskId } = req.params;
 
   if (!taskId) {
-    throw new ApiError(400, `task is required`);
+    return res.status(400).json({
+      message: "Task is required",
+    });
   }
 
   const task = await Task.findById(taskId);
@@ -40,7 +41,9 @@ const getAllTask = asyncHandler(async (req, res) => {
   const { userId } = req.body;
 
   if (userId === "") {
-    throw new ApiError(400, `user is required`);
+    return res.status(400).json({
+      message: "User is Required",
+    });
   }
 
   const todos = await Task.find({ createdBy: userId });
