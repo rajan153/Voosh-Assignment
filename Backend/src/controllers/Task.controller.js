@@ -44,10 +44,12 @@ const getAllTask = asyncHandler(async (req, res) => {
 
   const newSortOrder = sortValue === "asc" ? 1 : -1;
 
-  const todos = await Task.find({ createdBy: req.user._id }).sort({
+  const todos = await Task.find({
+    createdBy: req.user._id,
+    dueDate: { $gt: new Date() },
+  }).sort({
     _id: newSortOrder,
   });
-  // const todos = await Task.find({ createdBy: req.user._id });
 
   if (!todos) {
     return res.status(200).json(new ApiResponse(200, {}, "No Todos Present"));
