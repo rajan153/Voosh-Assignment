@@ -1,5 +1,5 @@
 // const BASE_URL = import.meta.env.VITE_BASE_URL;
-const BASE_URL = "http://localhost:3000/api/v1";
+const BASE_URL = "https://voosh-assignment-2xa4.onrender.com/api/v1";
 
 export const endPoints = {
   SIGNUP_API: BASE_URL + "/users/register",
