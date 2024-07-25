@@ -45,7 +45,6 @@ export function login(email, password, navigate) {
         throw new Error(response.data.message);
       }
 
-      console.log(response);
       dispatch(setToken(response.data.data.accessToken));
       dispatch(setRegisterData(response.data.data.user));
 
@@ -73,5 +72,40 @@ export function logout(navigate) {
     localStorage.removeItem("user");
     toast.success("Logged Out");
     navigate("/");
+  };
+}
+
+export function updateAvatar(data, token) {
+  return async (dispatch) => {
+    const toastId = toast.loading("Loading...");
+    dispatch(setLoading(true));
+    try {
+      const response = await apiConnector(
+        "PATCH",
+        UPDATE_AVATAR,
+        data,
+        {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${token}`,
+        }
+      );
+
+      console.log("RESPONSE: ", response);
+      if (!response.data.statusCode) {
+        throw new Error(response.data.message);
+      }
+
+      dispatch(setRegisterData({ ...response.data.data }));
+
+      localStorage.setItem(
+        "user",
+        JSON.stringify({ ...response.data.data })
+      );
+      toast.success(response.data.message);
+    } catch (error) {
+      toast.error("Error while update the avatar");
+    }
+    dispatch(setLoading(false));
+    toast.dismiss(toastId);
   };
 }
