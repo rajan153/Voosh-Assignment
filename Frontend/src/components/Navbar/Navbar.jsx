@@ -30,9 +30,6 @@ function Navbar() {
         </div>
       )}
       {token !== null && <ProfileDropDown />}
-      <button className="mr-4 md:hidden">
-        <AiOutlineMenu fontSize={24} fill="#13064b" />
-      </button>
     </div>
   );
 }
