@@ -30,14 +30,14 @@ function Home() {
         <div className="flex gap-10 text-sm">
           <Link
             to={token ? "/dashboard" : "signup"}
-            className="bg-black dark:bg-white rounded-full w-fit text-white dark:text-black px-5 py-1 hover:bg-slate-200"
+            className="bg-black dark:bg-white rounded-full w-fit hover:text-black text-white dark:text-black px-5 py-1 hover:bg-slate-200"
           >
             Get Started Now
           </Link>
           <Link
             to="https://github.com/rajan153/Voosh-Assignment"
             target="_blank"
-            className="bg-black dark:bg-white rounded-full w-fit text-white dark:text-black px-5 py-1 hover:bg-slate-200"
+            className="bg-black dark:bg-white rounded-full hover:text-black w-fit text-white dark:text-black px-5 py-1 hover:bg-slate-200"
           >
             Github
           </Link>
