@@ -2,8 +2,11 @@ import React from "react";
 import { AuroraBackground } from "../components/ui/aurora-background";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 function Home() {
+  const { token } = useSelector((state) => state.auth);
+  
   return (
     <AuroraBackground>
       <motion.div
@@ -25,12 +28,19 @@ function Home() {
           done.
         </div>
         <div className="flex gap-10 text-sm">
-        <Link to="/signup" className="bg-black dark:bg-white rounded-full w-fit text-white dark:text-black px-5 py-1 hover:bg-slate-200">
-          Get Started Now
-        </Link>
-        <Link to="https://github.com/rajan153/Voosh-Assignment" target="_blank" className="bg-black dark:bg-white rounded-full w-fit text-white dark:text-black px-5 py-1 hover:bg-slate-200">
-          Github
-        </Link>
+          <Link
+            to={token ? "/dashboard" : "signup"}
+            className="bg-black dark:bg-white rounded-full w-fit text-white dark:text-black px-5 py-1 hover:bg-slate-200"
+          >
+            Get Started Now
+          </Link>
+          <Link
+            to="https://github.com/rajan153/Voosh-Assignment"
+            target="_blank"
+            className="bg-black dark:bg-white rounded-full w-fit text-white dark:text-black px-5 py-1 hover:bg-slate-200"
+          >
+            Github
+          </Link>
         </div>
       </motion.div>
     </AuroraBackground>
