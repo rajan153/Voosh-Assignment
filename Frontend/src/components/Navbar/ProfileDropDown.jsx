@@ -2,10 +2,11 @@ import React, { useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { AiOutlineCaretDown } from "react-icons/ai";
-import { VscDashboard, VscSignOut } from "react-icons/vsc";
+import { VscDashboard, VscSignOut, VscAccount } from "react-icons/vsc";
 import useOnClickOutside from "../../hooks/useOnClickOutside";
 import { logout } from "../../services/AuthRoutes/AuthApi";
 import ConfirmationModal from "../Common/ConfirmationModal";
+import AvatarChange from "./AvatarChange";
 
 function ProfileDropDown() {
   const { registerData } = useSelector((state) => state.auth);
@@ -14,6 +15,7 @@ function ProfileDropDown() {
   const [open, setOpen] = useState(false);
   const ref = useRef(null);
   const [confirmationModal, setConfirmationModal] = useState(null);
+  const [profileModal, setProfileModal] = useState(false);
 
   useOnClickOutside(ref, () => setOpen(false));
 
@@ -21,6 +23,9 @@ function ProfileDropDown() {
 
   return (
     <div className="relative cursor-pointer" onClick={() => setOpen(true)}>
+      {profileModal && (
+        <AvatarChange setProfileModal={setProfileModal} setOpen={setOpen} />
+      )}
       <div className="flex items-center gap-x-1">
         <img
           src={registerData?.avatar}
@@ -41,6 +46,13 @@ function ProfileDropDown() {
               Dashboard
             </div>
           </Link>
+          <div
+            onClick={() => setProfileModal(true)}
+            className="flex w-full items-center gap-x-1 py-[10px] px-[12px] text-sm text-richblack-100 hover:bg-richblack-700 hover:text-richblack-25"
+          >
+            <VscAccount className="text-lg" size={22} />
+            Profile Change
+          </div>
           <div className="flex flex-col">
             <button
               onClick={() =>
