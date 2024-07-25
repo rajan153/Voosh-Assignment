@@ -38,15 +38,16 @@ const getTask = asyncHandler(async (req, res) => {
 });
 
 const getAllTask = asyncHandler(async (req, res) => {
-  const { userId } = req.body;
+  const { sortValue } = req.body;
 
-  if (userId === "") {
-    return res.status(400).json({
-      message: "User is Required",
-    });
-  }
+  console.log(req.body);
 
-  const todos = await Task.find({ createdBy: userId });
+  const newSortOrder = sortValue === "asc" ? 1 : -1;
+
+  const todos = await Task.find({ createdBy: req.user._id }).sort({
+    _id: newSortOrder,
+  });
+  // const todos = await Task.find({ createdBy: req.user._id });
 
   if (!todos) {
     return res.status(200).json(new ApiResponse(200, {}, "No Todos Present"));
@@ -58,8 +59,7 @@ const getAllTask = asyncHandler(async (req, res) => {
 });
 
 const updateTask = asyncHandler(async (req, res) => {
-  const { taskId } = req.params;
-  const { title, description, dueDate, due, reminders } = req.body;
+  const { title, description, dueDate, due, reminders, taskId } = req.body;
 
   if (title === "" && description === "") {
     return res
