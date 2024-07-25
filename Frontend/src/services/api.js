@@ -12,6 +12,6 @@ export const taskEndPoints = {
   DELETE_TASK: BASE_URL + "/tasks/delete-task",
   GET_ALL_TASK: BASE_URL + "/tasks/get-task",
   GET_TASK: BASE_URL + "/tasks/task/:taskId",
-  UPDATE_TASK: BASE_URL + "/tasks/update-task/:taskId",
+  UPDATE_TASK: BASE_URL + "/tasks/update-task",
   UPDATE_PROGRESS_TASK: BASE_URL + "/tasks/update-progress",
 };
