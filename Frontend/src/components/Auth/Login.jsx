@@ -5,12 +5,15 @@ import { Link, useNavigate } from "react-router-dom";
 import { login } from "../../services/AuthRoutes/AuthApi";
 import { useDispatch } from "react-redux";
 import toast from "react-hot-toast";
+import { useAuth0 } from "@auth0/auth0-react";
 
 function Login() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { register, handleSubmit } = useForm();
   const [showPassword, setShowPassword] = useState(false);
+
+  const { user, loginWithRedirect } = useAuth0();
 
   const loginSubmit = async (e) => {
     try {
@@ -35,12 +38,24 @@ function Login() {
           className="border border-gray-400 p-1"
           {...register("email", { required: true })}
         />
-        <input
-          type={showPassword ? "text" : "password"}
-          placeholder="Password"
-          className="border border-gray-400 p-1"
-          {...register("password", { required: true })}
-        />
+        <div className="relative">
+          <input
+            type={showPassword ? "text" : "password"}
+            placeholder="Password"
+            className="border border-gray-400 p-1"
+            {...register("password", { required: true })}
+          />
+          <span
+            onClick={() => setShowPassword((prev) => !prev)}
+            className="absolute right-3 top-[6px] z-[10] cursor-pointer"
+          >
+            {showPassword ? (
+              <AiOutlineEyeInvisible fontSize={24} fill="#13064b" />
+            ) : (
+              <AiOutlineEye fontSize={24} fill="#13064b" />
+            )}
+          </span>
+        </div>
         <button type="submit" className="bg-blue-500 text-white w-full py-1">
           Login
         </button>
@@ -50,7 +65,10 @@ function Login() {
             Signup
           </Link>
         </p>
-        <button className="bg-blue-500 text-white px-3 py-1 rounded-lg">
+        <button
+          onClick={() => loginWithRedirect()}
+          className="bg-blue-500 text-white px-3 py-1 rounded-lg"
+        >
           Login with Google
         </button>
       </form>
